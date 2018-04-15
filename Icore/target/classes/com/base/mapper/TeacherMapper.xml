@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.mapper.TeacherMapper">
+	
+	
+	<!-- 教师登录 -->
+	<select id="getLoginTeaInfo" parameterType="java.util.HashMap" resultType="java.lang.String">
+		select teaId from teacher where account = #{account} and password = #{password} limit 1
+	</select>
+	
+	
+	<sql id="oneSQL"> <!-- 需要什么就添加什么字段 -->
+		teaId, account, name, college, touch, titleJob, sex
+	</sql>
+	
+	<!-- 重构分割线 -->
+	<select id="getLogInfo" resultType="Teacher">
+		select <include refid="oneSQL" />
+		from teacher 
+		where account = #{account} and password = #{password} limit 1
+	</select>
+	
+	
+	<select id="getCountForTea" parameterType="String" resultType="int">
+		select count(teaId) from teacher where account = #{account}
+	</select>
+	
+	
+	<insert id="addTeacher" parameterType="Teacher">
+		<!-- 主键生成策略 -->
+		<selectKey keyProperty="teaId" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into teacher value (#{teaId}, #{account}, 
+		#{name}, #{college}, #{password}, #{touch}, #{titleJob}, #{sex})
+	</insert>
+	
+</mapper>

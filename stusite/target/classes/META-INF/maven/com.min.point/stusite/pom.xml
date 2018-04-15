@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.min.point</groupId>
+    <artifactId>Iparent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../Iparent/pom.xml</relativePath>
+  </parent>
+  <artifactId>stusite</artifactId>
+  <name>stusite</name>
+  
+  <dependencies>
+  
+  		<!-- 引入core包 -->
+		<dependency>
+		    <groupId>com.min.point</groupId>
+		    <artifactId>Icore</artifactId>
+		    <version>0.0.1-SNAPSHOT</version>
+		</dependency>
+  
+		<!-- json -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		</dependency>	
+			
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		</dependency>	
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.jr</groupId>
+		    <artifactId>jackson-jr-all</artifactId>
+		</dependency>	
+		
+		<dependency>    
+		    <groupId>net.sf.json-lib</groupId>    
+		    <artifactId>json-lib</artifactId>    
+		    <version>2.4</version>    
+		    <classifier>jdk15</classifier>    
+		</dependency> 		
+		  
+  </dependencies>
+  
+  
+  <build>
+	<plugins>
+	     	<!-- jetty -->
+	     	<plugin>
+	 		    <groupId>org.eclipse.jetty</groupId>
+			    <artifactId>jetty-maven-plugin</artifactId>
+			    <version>9.4.1.v20170120</version>  
+			    <configuration>
+			    	<scanIntervalSeconds>10</scanIntervalSeconds>
+			    	<webAppConfig>
+			    		<contextPath>/</contextPath>
+			    	</webAppConfig>
+			    	<httpConnector>
+			    		<port>8088</port>
+			    	</httpConnector>
+			    </configuration>	
+	    	</plugin> 	
+	</plugins>
+  </build>
+</project>

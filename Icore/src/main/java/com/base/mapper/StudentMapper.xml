@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.mapper.StudentMapper">
+
+	<resultMap type="com.base.domain.Student" id="baseMapStu">
+  		<id property="studentId" column="studentId"/>
+  		<result property="studentNum" column="studentNum"/>
+  		<result property="name" column="name"/>
+  		<result property="sex" column="sex"/>
+  		<result property="password" column="password"/>
+  		<result property="className" column="classNum"/>
+  		<result property="college" column="college"/>
+  		<result property="grade" column="grade"/>
+  		<result property="macPath" column="macPath"/>
+	</resultMap>
+
+
+	<!-- 测试 -->
+	<select id="getStudentByClassNum" parameterType="java.lang.String" resultType="Student">
+		select * from student where classNum = #{classNum}
+	</select>
+	
+	<!-- 学生注册 -->
+	<insert id="addStudentInfo" parameterType="Student">
+		<selectKey keyProperty="studentId" resultType="long" order="BEFORE">
+			SELECT LAST_INSERT_ID()			
+		</selectKey>
+		insert into student values (#{studentId}, #{studentNum}, 
+		#{name}, #{sex}, #{password}, #{className}, #{classNum}, 
+		#{college}, #{grade}, #{macPath})
+	</insert>
+	
+	<sql id="baseStudent">
+		studentNum, name, classNum, college, macPath
+	</sql>	
+	
+	<!-- 学生登录 -->
+	<select id="getLoginStuInfo" parameterType="java.util.HashMap" resultType="Student">
+		select * from student where studentNum = #{studentNum} and password = #{password} limit 1
+	</select>
+	 
+	<!-- 返回签到信息 -->
+	<select id="getListSign" parameterType="java.lang.String" resultType="Sign">
+		select * from sign where stuNum = #{stuNum}
+	</select>
+	
+	<!-- 重构分割线 -->
+	
+	<sql id="oneSQL">
+		studentId, studentNum, name, className, college, macPath
+	</sql>
+	
+	<select id="getCountForStudent" parameterType="String" resultType="int">
+		SELECT COUNT(studentId) FROM student WHERE studentNum = #{studentNum}
+	</select>
+	
+	<select id="getLoginInfo" resultType="Student">
+		select <include refid="oneSQL" />
+		from student where studentNum = #{studentNum} and password = #{password} limit 1
+	</select>
+	
+	<!-- 蓝牙匹配，所有学生列表 -->
+	<select id="getAllStuForList" parameterType="java.lang.String" resultType="Student">
+		select 
+		<include refid="oneSQL" />
+		from student where classNum = #{classNum}
+	</select>
+	
+	<!-- 批量查询 -->
+	<select id="getSignListStu" parameterType="java.util.List" resultType="Student">
+		select	
+		<include refid="oneSQL" />	
+		from student where macPath in 
+		<foreach collection="list" item="obj" open="(" close=")" separator=",">
+			#{obj}
+		</foreach>
+	</select>
+	
+</mapper>

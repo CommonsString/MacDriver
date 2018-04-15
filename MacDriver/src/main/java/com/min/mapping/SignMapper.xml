@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.min.dao.SignMapper">
+
+	
+	<!-- 修改信息 -->
+	<insert id="addSignChangeInfo" parameterType="Sign">
+		<!-- 主键生成策略 -->
+		<selectKey keyProperty="signId" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into sign value (#{signId}, #{stuNum}, #{stuName}, #{classNums}, #{isSign}, 
+		#{classRoom}, #{crouseNam}, #{signTime}, #{macPath}, #{part})
+	</insert>
+	
+	<!-- 获取已签到学生信息   -->
+	<select id="getSignStudentForList" resultType="Sign">
+		select * from sign where classNums = #{classNums} and isSign = 1
+	</select>
+	
+	<!-- 获取未签到学生信息   -->
+	<select id="getUnSignStudentForList" resultType="Sign">
+		select * from sign where classNums = #{classNums} and isSign = 0
+	</select>
+	
+	<!-- 更新状态  -->
+	<update id="updateIsSign" parameterType="String">
+		update sign set isSign = 1 where stuNum = #{stuNum}
+	</update>
+	
+	<!-- 更新状态  -->
+	<update id="updateIsSignZero" parameterType="String">
+		update sign set isSign = 0 where macPath = #{macPath}
+	</update>
+	
+	<!-- 获取重复日期 -->
+	<select id="getDateAndCrouseIsCopy" parameterType="HashMap" resultType="int">
+		select count(signId) from sign where signTime = #{signTime} and part = #{part}
+	</select>
+	
+	<!-- 根据蓝牙地址查找 -->
+	<select id="getMacPathBySign" parameterType="String" resultType="Sign">
+		select stuNum, isSign from sign where macPath = #{macPath}
+	</select>
+	
+</mapper>

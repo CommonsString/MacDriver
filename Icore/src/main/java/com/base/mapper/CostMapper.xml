@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.base.mapper.CostMapper">
+
+	<select id="getDetailIsExist" parameterType="String" resultType="int">
+		select count(classNum) from cost where classNum = #{classNum}
+	</select>
+	
+	<insert id="insertDetails" parameterType="Cost">
+		<!-- 主键生成策略 -->
+		<selectKey keyProperty="costId" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into Cost (costId, classNum, name, time, details) values 
+		(#{costId}, #{classNum}, #{name}, #{time}, #{details})
+	</insert>
+	
+	<!-- 获取最新数据  -->
+	<select id="getNewDateDetails" parameterType="String" resultType="Cost">
+		select * from cost where classNum = #{classNum} ORDER BY time desc limit 1
+	</select>
+	
+	
+</mapper>

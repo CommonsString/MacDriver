@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.min.dao.StudentMapper">
+
+	<!-- 测试 -->
+	<select id="getStudentByClassNum" parameterType="java.lang.String" resultType="Student">
+		select * from student where classNum = #{classNum}
+	</select>
+	
+	<!-- 学生注册 -->
+	<insert id="addStudentInfo" parameterType="Student">
+		<!-- 主键生成策略 -->
+		<selectKey keyProperty="studentId" resultType="String" order="BEFORE">
+			select replace(uuid(),'-','') from dual
+		</selectKey>
+		insert into student value (#{studentId}, #{studentNum}, 
+		#{name}, #{sex}, #{password}, #{className}, #{classNum}, 
+		#{college}, #{grade}, #{macPath})
+	</insert>
+	
+	<sql id="baseStudent">
+		studentNum, name, classNum, college, macPath
+	</sql>	
+	
+	<!-- 学生登录 -->
+	<select id="getLoginStuInfo" parameterType="java.util.HashMap" resultType="Student">
+		select * from student where studentNum = #{studentNum} and password = #{password} limit 1
+	</select>
+	 
+	<!-- 返回签到信息 -->
+	<select id="getListSign" parameterType="java.lang.String" resultType="Sign">
+		select * from sign where stuNum = #{stuNum}
+	</select>
+	
+	<!-- 蓝牙匹配，所有学生列表 -->
+	<select id="getAllStuForList" parameterType="java.lang.String" resultType="Student">
+		select 
+		<include refid="baseStudent" />
+		from student where classNum = #{classNum}
+	</select>
+	
+
+	
+	
+	
+</mapper>
